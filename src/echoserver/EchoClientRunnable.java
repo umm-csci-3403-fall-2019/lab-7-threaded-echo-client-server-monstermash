@@ -4,11 +4,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class EchoServerRunnable implements Runnable {
+public class EchoClientRunnable implements Runnable {
 
     Socket socket;
 
-    EchoServerRunnable(Socket socket) {
+    EchoClientRunnable(Socket socket) {
         this.socket = socket;
     }
     public void run() {
@@ -17,13 +17,19 @@ public class EchoServerRunnable implements Runnable {
             InputStream input = socket.getInputStream();
 
             int b;
-            while ((b = input.read()) != -1) {
+            int response;
+            while ((b = System.in.read()) != -1) {
                 output.write(b);
+                output.flush();
+                response = input.read();
+                System.out.write(response);
             }
+            System.out.flush();
 
             output.flush();
             output.close();
             input.close();
+
         } catch (Exception e) {
             System.out.println("We caught an unexpected exception");
             System.err.println(e);
